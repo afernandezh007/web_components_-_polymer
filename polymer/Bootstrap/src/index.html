@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+    <template id="sdtemplate">
+        <style>
+            p { color: orange; }
+        </style>
+        <p>I'm in Shadow DOM. My markup was stamped from a &lt;template&gt;.</p>
+        <content select="div"></content>
+        <content></content>
+    </template>
+    
+    
+    <!--<foo>Hola</foo>-->
+    <script>
+        // registrar componente
+        //esta funcion es nueva de webcomponent
+        //se debe de poner tag-nombre
+        /*var foo = document.registerElement('x-foo');
+        var instance = new foo();
+        instance.textContent="Hello";
+        document.body.appendChild(instance);
+        
+        
+        //Ejemplo de creacion de un boton heredado de un button de html
+        //Se usa a traves del prototype
+        var MegaButton = document.registerElement('mega-button', {
+        prototype: Object.create(HTMLButtonElement.prototype),
+        extends: 'button'
+        }); 
+        
+        var instanceButton = new MegaButton();
+        instanceButton.textContent = "Click";    
+        document.body.appendChild(instanceButton);
+
+
+        document.registerElement('x-foo');   
+        var xFoo = document.createElement('x-foo');
+        xFoo.textContent ="Hello";
+        xFoo.addEventListener('click', function(e) {
+            alert('Thanks!');
+        });         
+          
+        document.body.appendChild(xFoo);*/
+
+var proto = Object.create(HTMLElement.prototype, {
+  createdCallback: {
+    value: function() {
+      var t = document.querySelector('#sdtemplate');
+      var clone = document.importNode(t.content, true);
+      this.createShadowRoot().appendChild(clone);
+    }
+  }
+});
+        document.registerElement('x-foo-from-template', {prototype: proto});
+        
+    </script>
+    
+    <x-foo-from-template>
+        <div>
+            Hello div
+        </div>
+        <p>hello</p>
+    </x-foo-from-template>
+</body>
+</html>
